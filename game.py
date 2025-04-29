@@ -481,7 +481,7 @@ def handle_ghostly_encounter(score):
             return False, score
 
 
-def play_game(score):
+def play_game(score, turns, max_turns):
     """Run the main game, presenting initial choices and directing the flow.
 
     This function orchestrates the game by displaying the welcome scene and
@@ -494,12 +494,16 @@ def play_game(score):
 
     Args:
         score (int): The player's current score.
+        turns (int): The current number of turns taken.  # Added for game-end condition
+        max_turns (int): The maximum number of turns allowed.  # Added for game-end condition
 
     Returns:
-        tuple: (game_won, updated_score) where game_won is True for a win,
-               False for a loss; updated_score is the new score.
+        tuple: (game_won, updated_score, updated_turns) where game_won is True for a win,
+               False for a loss; updated_score is the new score; updated_turns is the new turn count.  # Modified for game-end condition
     """
     display_welcome()
+    # Added for game-end condition: Display remaining turns
+    print_sleep(f"⏳ You have {max_turns - turns} turns remaining.", Fore.YELLOW)
     print_sleep("1️⃣ Follow the glowing light to the west 🌅.", Fore.CYAN)
     print_sleep("2️⃣ Investigate the rustling in the bushes to the east 🐿️.",
                 Fore.CYAN)
@@ -513,6 +517,15 @@ def play_game(score):
             break
         print_sleep("Please enter 1, 2, or 3.", Fore.RED)
     
+    # Added for game-end condition: Increment turns after a valid choice
+    turns += 1
+    
+    # Added for game-end condition: Check if turn limit is reached
+    if turns >= max_turns:
+        print_sleep("⏳ Time runs out! The forest's magic fades.", Fore.RED)
+        print_sleep("You’re lost in the woods forever. You lose! 😢", Fore.RED)
+        return False, score, turns
+    
     # Process the initial choice
     if choice == "1":
         score += 10
@@ -522,8 +535,15 @@ def play_game(score):
         if result:
             score += 20
             print_sleep("The amulet guides you to a final challenge.", Fore.GREEN)
-            return handle_final_path(score)
-        return result, score
+            # Added for game-end condition: Increment turns for final path
+            turns += 1
+            # Added for game-end condition: Check if turn limit is reached
+            if turns >= max_turns:
+                print_sleep("⏳ Time runs out! The forest's magic fades.", Fore.RED)
+                print_sleep("You’re lost in the woods forever. You lose! 😢", Fore.RED)
+                return False, score, turns
+            return handle_final_path(score) + (turns,)
+        return result, score, turns
     elif choice == "2":
         score += 10
         print_sleep("You cautiously approach the rustling bushes.", Fore.GREEN)
@@ -531,10 +551,10 @@ def play_game(score):
         if encounter == "friend":
             print_sleep("The bushes part to reveal a friendly creature!",
                         Fore.GREEN)
-            return handle_squirrel_encounter(score)
+            return handle_squirrel_encounter(score) + (turns,)
         else:
             print_sleep("A terrifying roar echoes from the bushes!", Fore.RED)
-            return handle_monster_encounter(score)
+            return handle_monster_encounter(score) + (turns,)
     else:
         score += 10
         print_sleep("You follow the faint trail, curious about its secrets.",
@@ -542,11 +562,11 @@ def play_game(score):
         encounter = random.choice(["vault", "ghost"])
         if encounter == "vault":
             print_sleep("The trail leads to a mysterious structure!", Fore.GREEN)
-            return handle_treasure_vault(score)
+            return handle_treasure_vault(score) + (turns,)
         else:
             print_sleep("A chill runs down your spine as the air grows cold.",
                         Fore.CYAN)
-            return handle_ghostly_encounter(score)
+            return handle_ghostly_encounter(score) + (turns,)
 
 
 def main():
@@ -565,13 +585,18 @@ def main():
         None
     """
     score = 0
+    # Added for game-end condition: Initialize turns and max_turns
+    max_turns = 10
     while True:
-        # Run the game and get the result
-        result, score = play_game(score)
+        # Added for game-end condition: Reset turns for each game
+        turns = 0
+        # Modified for game-end condition: Pass turns and max_turns to play_game
+        result, score, turns = play_game(score, turns, max_turns)
         
         # Display the game outcome
+        # Modified for game-end condition: Include turns in outcome message
         print_sleep(f"🎮 Game Over! You {'won 🎉' if result else 'lost 😢'}. "
-                    f"Your score: {score}", Fore.YELLOW)
+                    f"Your score: {score}, Turns taken: {turns}", Fore.YELLOW)
         
         # Prompt for replay and validate input
         while True:
@@ -583,7 +608,8 @@ def main():
         
         # Handle replay decision
         if play_again != "yes":
-            print_sleep(f"Thanks for playing! Final score: {score} 👋",
+            # Modified for game-end condition: Include turns in final message
+            print_sleep(f"Thanks for playing! Final score: {score}, Turns taken: {turns} 👋",
                         Fore.YELLOW)
             print_sleep("Come back for another adventure!", Fore.YELLOW)
             break
