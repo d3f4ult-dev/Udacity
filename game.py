@@ -23,11 +23,87 @@
 
 import random
 import time
+import json
+import os
 from colorama import init, Fore, Style
+from datetime import datetime
 
 
 # Initialize colorama for cross-platform colored text output
 init()
+
+
+class Inventory:
+    def __init__(self):
+        self.items = {}
+        self.capacity = 10
+    
+    def add_item(self, item_name, quantity=1):
+        if len(self.items) >= self.capacity:
+            return False
+        if item_name in self.items:
+            self.items[item_name] += quantity
+        else:
+            self.items[item_name] = quantity
+        return True
+    
+    def remove_item(self, item_name, quantity=1):
+        if item_name in self.items:
+            if self.items[item_name] >= quantity:
+                self.items[item_name] -= quantity
+                if self.items[item_name] == 0:
+                    del self.items[item_name]
+                return True
+        return False
+    
+    def has_item(self, item_name):
+        return item_name in self.items
+    
+    def get_items(self):
+        return self.items.copy()
+
+
+class GameState:
+    def __init__(self):
+        self.score = 0
+        self.turns = 0
+        self.max_turns = 10
+        self.inventory = Inventory()
+        self.achievements = set()
+        self.character_stats = {
+            "health": 100,
+            "strength": 10,
+            "magic": 5,
+            "luck": 5
+        }
+    
+    def save(self, filename="save_game.json"):
+        save_data = {
+            "score": self.score,
+            "turns": self.turns,
+            "max_turns": self.max_turns,
+            "inventory": self.inventory.items,
+            "achievements": list(self.achievements),
+            "character_stats": self.character_stats,
+            "save_date": datetime.now().isoformat()
+        }
+        with open(filename, 'w') as f:
+            json.dump(save_data, f)
+    
+    @classmethod
+    def load(cls, filename="save_game.json"):
+        if not os.path.exists(filename):
+            return None
+        with open(filename, 'r') as f:
+            save_data = json.load(f)
+        game_state = cls()
+        game_state.score = save_data["score"]
+        game_state.turns = save_data["turns"]
+        game_state.max_turns = save_data["max_turns"]
+        game_state.inventory.items = save_data["inventory"]
+        game_state.achievements = set(save_data["achievements"])
+        game_state.character_stats = save_data["character_stats"]
+        return game_state
 
 
 def print_sleep(message, color=Fore.RESET, sleep_duration=0.5):
@@ -93,45 +169,40 @@ def handle_riddle(score):
         tuple: (game_won, updated_score) where game_won is True if the riddle is
                solved correctly, False otherwise; updated_score is the new score.
     """
-    print_sleep("You follow the glowing light to a magical clearing 🌼.",
-                Fore.GREEN)
-    print_sleep("A wise old wizard 🧙‍♂️ appears, his eyes twinkling with "
-                "mischief.", Fore.GREEN)
-    print_sleep("He says, 'Solve my riddle to gain a magical artifact! 🪄'",
-                Fore.GREEN)
+    game_state = GameState()
+    game_state.score = score
+    
+    print_sleep("You follow the glowing light to a magical clearing 🌼.", Fore.GREEN)
+    print_sleep("A wise old wizard 🧙‍♂️ appears, his eyes twinkling with mischief.", Fore.GREEN)
+    print_sleep("He says, 'Solve my riddle to gain a magical artifact! 🪄'", Fore.GREEN)
     print_sleep("Riddle: 'I speak without a mouth and hear without ears. I "
-                "have no body, but I come alive with wind. What am I?'",
-                Fore.YELLOW)
+                "have no body, but I come alive with wind. What am I?'", Fore.YELLOW)
     print_sleep("1️⃣ Answer: A ghost 👻.", Fore.CYAN)
     print_sleep("2️⃣ Answer: An echo 🗣️.", Fore.CYAN)
     print_sleep("3️⃣ Answer: A bird 🐦.", Fore.CYAN)
     
     # Prompt for player's answer and validate input
     while True:
-        riddle_choice = input(Fore.MAGENTA + "Answer? (1/2/3): "
-                              + Style.RESET_ALL)
+        riddle_choice = input(Fore.MAGENTA + "Answer? (1/2/3): " + Style.RESET_ALL)
         if riddle_choice in ["1", "2", "3"]:
             break
         print_sleep("Please enter 1, 2, or 3.", Fore.RED)
     
     # Process the riddle answer
     if riddle_choice == "2":
-        score += 50
-        print_sleep("'Correct!' the wizard exclaims, handing you a glowing "
-                    "amulet 💎.", Fore.GREEN)
-        print_sleep("The amulet pulses with power, making you feel invincible.",
-                    Fore.GREEN)
-        print_sleep("You thank the wizard and prepare to continue your quest.",
-                    Fore.GREEN)
-        return True, score
+        game_state.score += 50
+        print_sleep("'Correct!' the wizard exclaims, handing you a glowing amulet 💎.", Fore.GREEN)
+        print_sleep("The amulet pulses with power, making you feel invincible.", Fore.GREEN)
+        print_sleep("You thank the wizard and prepare to continue your quest.", Fore.GREEN)
+        game_state.inventory.add_item("amulet")
+        game_state.achievements.add("Riddle Master")
+        return True, game_state.score
     else:
-        score -= 20
-        print_sleep("'Wrong!' the wizard says, his voice cold. The clearing "
-                    "fades.", Fore.RED)
+        game_state.score -= 20
+        print_sleep("'Wrong!' the wizard says, his voice cold. The clearing fades.", Fore.RED)
         print_sleep("Shadow creatures attack from the darkness 🌑!", Fore.RED)
-        print_sleep("You barely escape, wounded and defeated. You lose! 😢",
-                    Fore.RED)
-        return False, score
+        print_sleep("You barely escape, wounded and defeated. You lose! 😢", Fore.RED)
+        return False, game_state.score
 
 
 def handle_squirrel_encounter(score):
@@ -238,7 +309,7 @@ def handle_monster_encounter(score):
                         Fore.GREEN)
             print_sleep("You find a map 🗺️ on the monster, leading to a castle.",
                         Fore.GREEN)
-            print_sleep("At the castle, you’re crowned a hero! You win! 👑",
+            print_sleep("At the castle, you're crowned a hero! You win! 👑",
                         Fore.GREEN)
             return True, score
         else:
@@ -281,7 +352,7 @@ def handle_final_path(score):
     a roaring river (1) or a mountain trail (2). Input is validated to ensure
     only '1' or '2' is accepted. The bridge has a random outcome: safe crossing
     to a kingdom (+50 points) or collapse into the river (-40 points). The
-    mountain leads to a dragon’s lair and a win (+60 points). Invalid inputs
+    mountain leads to a dragon's lair and a win (+60 points). Invalid inputs
     prompt a retry.
 
     Args:
@@ -291,7 +362,7 @@ def handle_final_path(score):
         tuple: (game_won, updated_score) where game_won is True for a win,
                False for a loss; updated_score is the new score.
     """
-    print_sleep("With the amulet’s power, you venture deeper into the forest.",
+    print_sleep("With the amulet's power, you venture deeper into the forest.",
                 Fore.GREEN)
     print_sleep("The path splits, presenting a crucial choice:", Fore.GREEN)
     print_sleep("1️⃣ A rickety bridge over a roaring river 🌉.", Fore.CYAN)
@@ -321,11 +392,11 @@ def handle_final_path(score):
             score -= 40
             print_sleep("The bridge creaks and snaps beneath you!", Fore.RED)
             print_sleep("You fall into the raging river below. 🌊", Fore.RED)
-            print_sleep("You’re swept away, defeated. You lose! 😢", Fore.RED)
+            print_sleep("You're swept away, defeated. You lose! 😢", Fore.RED)
             return False, score
     else:
         score += 60
-        print_sleep("You climb the steep trail, reaching a dragon’s lair! 🐉",
+        print_sleep("You climb the steep trail, reaching a dragon's lair! 🐉",
                     Fore.GREEN)
         print_sleep("The dragon, awed by your amulet, bows respectfully.",
                     Fore.GREEN)
@@ -374,13 +445,13 @@ def handle_treasure_vault(score):
             print_sleep("Your nimble fingers unlock the vault with a click!",
                         Fore.GREEN)
             print_sleep("Inside, you find piles of gold and gems! 💎", Fore.GREEN)
-            print_sleep("You’re now a legend of wealth. You win! 🎉", Fore.GREEN)
+            print_sleep("You're now a legend of wealth. You win! 🎉", Fore.GREEN)
             return True, score
         else:
             score -= 50
             print_sleep("A trap springs! Darts shoot from the walls! 🏹",
                         Fore.RED)
-            print_sleep("You’re wounded and retreat in defeat. You lose! 😢",
+            print_sleep("You're wounded and retreat in defeat. You lose! 😢",
                         Fore.RED)
             return False, score
     elif vault_choice == "2":
@@ -399,7 +470,7 @@ def handle_treasure_vault(score):
                         Fore.GREEN)
             print_sleep("The vault opens, filled with magical artifacts! 🪄",
                         Fore.GREEN)
-            print_sleep("You’re hailed as a master mage. You win! 🎉", Fore.GREEN)
+            print_sleep("You're hailed as a master mage. You win! 🎉", Fore.GREEN)
             return True, score
         else:
             score -= 40
@@ -451,7 +522,7 @@ def handle_ghostly_encounter(score):
                         Fore.GREEN)
             print_sleep("The ghost nods and grants you passage to a shrine.",
                         Fore.GREEN)
-            print_sleep("You’re blessed with wisdom. You win! 🌟", Fore.GREEN)
+            print_sleep("You're blessed with wisdom. You win! 🌟", Fore.GREEN)
             return True, score
         else:
             score -= 45
@@ -464,20 +535,20 @@ def handle_ghostly_encounter(score):
         print_sleep("You offer a shiny trinket, and the ghost accepts.",
                     Fore.GREEN)
         print_sleep("It vanishes, leaving a path to a sacred grove.", Fore.GREEN)
-        print_sleep("You’re honored as a peacemaker. You win! 🌿", Fore.GREEN)
+        print_sleep("You're honored as a peacemaker. You win! 🌿", Fore.GREEN)
         return True, score
     else:
         flee_result = random.choice(["escape", "capture"])
         if flee_result == "escape":
             score += 35
-            print_sleep("You run swiftly, evading the ghost’s grasp!", Fore.GREEN)
+            print_sleep("You run swiftly, evading the ghost's grasp!", Fore.GREEN)
             print_sleep("You find a safe haven in a nearby village.", Fore.GREEN)
-            print_sleep("You’re safe at last. You win! 🏡", Fore.GREEN)
+            print_sleep("You're safe at last. You win! 🏡", Fore.GREEN)
             return True, score
         else:
             score -= 35
             print_sleep("The ghost catches you, its touch freezing!", Fore.RED)
-            print_sleep("You’re trapped in its realm. You lose! 👻", Fore.RED)
+            print_sleep("You're trapped in its realm. You lose! 👻", Fore.RED)
             return False, score
 
 
@@ -494,79 +565,89 @@ def play_game(score, turns, max_turns):
 
     Args:
         score (int): The player's current score.
-        turns (int): The current number of turns taken.  # Added for game-end condition
-        max_turns (int): The maximum number of turns allowed.  # Added for game-end condition
+        turns (int): The current number of turns taken.
+        max_turns (int): The maximum number of turns allowed.
 
     Returns:
         tuple: (game_won, updated_score, updated_turns) where game_won is True for a win,
-               False for a loss; updated_score is the new score; updated_turns is the new turn count.  # Modified for game-end condition
+               False for a loss; updated_score is the new score; updated_turns is the new turn count.
     """
+    game_state = GameState()
+    game_state.score = score
+    game_state.turns = turns
+    game_state.max_turns = max_turns
+    
     display_welcome()
-    # Added for game-end condition: Display remaining turns
-    print_sleep(f"⏳ You have {max_turns - turns} turns remaining.", Fore.YELLOW)
+    print_sleep(f"⏳ You have {game_state.max_turns - game_state.turns} turns remaining.", Fore.YELLOW)
     print_sleep("1️⃣ Follow the glowing light to the west 🌅.", Fore.CYAN)
-    print_sleep("2️⃣ Investigate the rustling in the bushes to the east 🐿️.",
-                Fore.CYAN)
+    print_sleep("2️⃣ Investigate the rustling in the bushes to the east 🐿️.", Fore.CYAN)
     print_sleep("3️⃣ Explore a faint trail to the north 🛤️.", Fore.CYAN)
     
     # Prompt for player's initial choice and validate input
     while True:
-        choice = input(Fore.MAGENTA + "What will you do? (1/2/3): "
-                       + Style.RESET_ALL)
+        choice = input(Fore.MAGENTA + "What will you do? (1/2/3): " + Style.RESET_ALL)
         if choice in ["1", "2", "3"]:
             break
         print_sleep("Please enter 1, 2, or 3.", Fore.RED)
     
-    # Added for game-end condition: Increment turns after a valid choice
-    turns += 1
+    game_state.turns += 1
     
-    # Added for game-end condition: Check if turn limit is reached
-    if turns >= max_turns:
+    if game_state.turns >= game_state.max_turns:
         print_sleep("⏳ Time runs out! The forest's magic fades.", Fore.RED)
-        print_sleep("You’re lost in the woods forever. You lose! 😢", Fore.RED)
-        return False, score, turns
+        print_sleep("You're lost in the woods forever. You lose! 😢", Fore.RED)
+        return False, game_state.score, game_state.turns
     
-    # Process the initial choice
     if choice == "1":
-        score += 10
-        print_sleep("You head toward the glowing light, feeling drawn to it.",
-                    Fore.GREEN)
-        result, score = handle_riddle(score)
+        game_state.score += 10
+        print_sleep("You head toward the glowing light, feeling drawn to it.", Fore.GREEN)
+        result, game_state.score = handle_riddle(game_state.score)
         if result:
-            score += 20
+            game_state.inventory.add_item("amulet")
+            game_state.achievements.add("Riddle Master")
+            game_state.score += 20
             print_sleep("The amulet guides you to a final challenge.", Fore.GREEN)
-            # Added for game-end condition: Increment turns for final path
-            turns += 1
-            # Added for game-end condition: Check if turn limit is reached
-            if turns >= max_turns:
+            game_state.turns += 1
+            if game_state.turns >= game_state.max_turns:
                 print_sleep("⏳ Time runs out! The forest's magic fades.", Fore.RED)
-                print_sleep("You’re lost in the woods forever. You lose! 😢", Fore.RED)
-                return False, score, turns
-            return handle_final_path(score) + (turns,)
-        return result, score, turns
+                print_sleep("You're lost in the woods forever. You lose! 😢", Fore.RED)
+                return False, game_state.score, game_state.turns
+            result, game_state.score = handle_final_path(game_state.score)
+            if result:
+                game_state.achievements.add("Forest Explorer")
+            return result, game_state.score, game_state.turns
+        return result, game_state.score, game_state.turns
     elif choice == "2":
-        score += 10
+        game_state.score += 10
         print_sleep("You cautiously approach the rustling bushes.", Fore.GREEN)
         encounter = random.choice(["friend", "monster"])
         if encounter == "friend":
-            print_sleep("The bushes part to reveal a friendly creature!",
-                        Fore.GREEN)
-            return handle_squirrel_encounter(score) + (turns,)
+            print_sleep("The bushes part to reveal a friendly creature!", Fore.GREEN)
+            result, game_state.score = handle_squirrel_encounter(game_state.score)
+            if result:
+                game_state.achievements.add("Friend of the Forest")
+            return result, game_state.score, game_state.turns
         else:
             print_sleep("A terrifying roar echoes from the bushes!", Fore.RED)
-            return handle_monster_encounter(score) + (turns,)
+            result, game_state.score = handle_monster_encounter(game_state.score)
+            if result:
+                game_state.achievements.add("Monster Slayer")
+            return result, game_state.score, game_state.turns
     else:
-        score += 10
-        print_sleep("You follow the faint trail, curious about its secrets.",
-                    Fore.GREEN)
+        game_state.score += 10
+        print_sleep("You follow the faint trail, curious about its secrets.", Fore.GREEN)
         encounter = random.choice(["vault", "ghost"])
         if encounter == "vault":
             print_sleep("The trail leads to a mysterious structure!", Fore.GREEN)
-            return handle_treasure_vault(score) + (turns,)
+            result, game_state.score = handle_treasure_vault(game_state.score)
+            if result:
+                game_state.achievements.add("Treasure Hunter")
+            return result, game_state.score, game_state.turns
         else:
-            print_sleep("A chill runs down your spine as the air grows cold.",
-                        Fore.CYAN)
-            return handle_ghostly_encounter(score) + (turns,)
+            print_sleep("A chill runs down your spine as the air grows cold.", Fore.CYAN)
+            result, game_state.score = handle_ghostly_encounter(game_state.score)
+            if result:
+                game_state.achievements.add("Ghost Whisperer")
+            return result, game_state.score, game_state.turns
 
 
 def main():
@@ -577,47 +658,70 @@ def main():
     replay input is validated to accept only 'yes' or 'no'. If the player
     chooses to replay, the score is reset to 0, and a decorative separator is
     displayed. The game continues until the player chooses not to replay.
-
-    Args:
-        None
-
-    Returns:
-        None
     """
-    score = 0
-    # Added for game-end condition: Initialize turns and max_turns
-    max_turns = 10
+    print_sleep("Welcome to Epic Adventure Quest! 🎮", Fore.YELLOW)
+    
+    # Check for existing save file
+    game_state = GameState.load()
+    if game_state:
+        print_sleep("A saved game was found. Would you like to load it? (yes/no): ", Fore.YELLOW)
+        load_choice = input().lower()
+        if load_choice == "yes":
+            print_sleep("Game loaded successfully! 🎮", Fore.GREEN)
+        else:
+            game_state = GameState()
+            print_sleep("Starting a new game! 🎮", Fore.GREEN)
+    else:
+        game_state = GameState()
+        print_sleep("Starting a new game! 🎮", Fore.GREEN)
+    
     while True:
-        # Added for game-end condition: Reset turns for each game
-        turns = 0
-        # Modified for game-end condition: Pass turns and max_turns to play_game
-        result, score, turns = play_game(score, turns, max_turns)
+        result, game_state.score, game_state.turns = play_game(
+            game_state.score, 
+            game_state.turns, 
+            game_state.max_turns
+        )
         
         # Display the game outcome
-        # Modified for game-end condition: Include turns in outcome message
         print_sleep(f"🎮 Game Over! You {'won 🎉' if result else 'lost 😢'}. "
-                    f"Your score: {score}, Turns taken: {turns}", Fore.YELLOW)
+                    f"Your score: {game_state.score}, Turns taken: {game_state.turns}", 
+                    Fore.YELLOW)
         
-        # Prompt for replay and validate input
+        # Display inventory and achievements
+        if game_state.inventory.items:
+            print_sleep("\nInventory:", Fore.CYAN)
+            for item, quantity in game_state.inventory.items.items():
+                print_sleep(f"- {item}: {quantity}", Fore.CYAN)
+        
+        if game_state.achievements:
+            print_sleep("\nAchievements:", Fore.YELLOW)
+            for achievement in game_state.achievements:
+                print_sleep(f"- {achievement}", Fore.YELLOW)
+        
+        # Prompt for next action
+        print_sleep("\nWhat would you like to do?", Fore.YELLOW)
+        print_sleep("1️⃣ Play again", Fore.CYAN)
+        print_sleep("2️⃣ Save game", Fore.CYAN)
+        print_sleep("3️⃣ Quit", Fore.CYAN)
+        
         while True:
-            play_again = input(Fore.MAGENTA + "Replay? (yes/no): "
-                               + Style.RESET_ALL).lower()
-            if play_again in ["yes", "no"]:
+            choice = input(Fore.MAGENTA + "Choose (1/2/3): " + Style.RESET_ALL)
+            if choice in ["1", "2", "3"]:
                 break
-            print_sleep("Please enter 'yes' or 'no'.", Fore.RED)
+            print_sleep("Please enter 1, 2, or 3.", Fore.RED)
         
-        # Handle replay decision
-        if play_again != "yes":
-            # Modified for game-end condition: Include turns in final message
-            print_sleep(f"Thanks for playing! Final score: {score}, Turns taken: {turns} 👋",
-                        Fore.YELLOW)
-            print_sleep("Come back for another adventure!", Fore.YELLOW)
+        if choice == "1":
+            game_state = GameState()  # Reset for new game
+            print_sleep("\n" + "🌟" * 15 + "\n", Fore.YELLOW)
+            print_sleep("A new quest awaits you!", Fore.YELLOW)
+        elif choice == "2":
+            game_state.save()
+            print_sleep("Game saved successfully! 💾", Fore.GREEN)
+            print_sleep("Thanks for playing! Come back for another adventure! 👋", Fore.YELLOW)
             break
-        
-        # Prepare for a new game
-        print_sleep("\n" + "🌟" * 15 + "\n", Fore.YELLOW)
-        print_sleep("A new quest awaits you!", Fore.YELLOW)
-        score = 0
+        else:
+            print_sleep("Thanks for playing! Come back for another adventure! 👋", Fore.YELLOW)
+            break
 
 
 if __name__ == "__main__":
