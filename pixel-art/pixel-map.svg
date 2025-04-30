@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .pixel { shape-rendering: crispEdges; }
+    </style>
+    <!-- Map Background -->
+    <rect class="pixel" x="4" y="4" width="24" height="24" fill="#F5DEB3"/>
+    <!-- Map Edges -->
+    <rect class="pixel" x="4" y="4" width="24" height="2" fill="#DEB887"/>
+    <rect class="pixel" x="4" y="26" width="24" height="2" fill="#DEB887"/>
+    <rect class="pixel" x="4" y="4" width="2" height="24" fill="#DEB887"/>
+    <rect class="pixel" x="26" y="4" width="2" height="24" fill="#DEB887"/>
+    <!-- Map Details -->
+    <path class="pixel" d="M8 12 L12 8 L16 12 L20 8 L24 12" stroke="#8B4513" fill="none"/>
+    <circle class="pixel" cx="16" cy="16" r="2" fill="#FF0000"/>
+    <path class="pixel" d="M10 20 C14 16, 18 24, 22 20" stroke="#228B22" fill="none"/>
+</svg> 

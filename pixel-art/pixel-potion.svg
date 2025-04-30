@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .pixel { shape-rendering: crispEdges; }
+    </style>
+    <!-- Potion Bottle -->
+    <path class="pixel" d="M12 8 L20 8 L20 24 Q20 28, 16 28 Q12 28, 12 24 Z" fill="#4169E1"/>
+    <!-- Bottle Neck -->
+    <rect class="pixel" x="14" y="4" width="4" height="4" fill="#4169E1"/>
+    <!-- Bottle Cap -->
+    <rect class="pixel" x="13" y="2" width="6" height="2" fill="#8B4513"/>
+    <!-- Potion Bubbles -->
+    <circle class="pixel" cx="15" cy="12" r="1" fill="#FFFFFF" opacity="0.6"/>
+    <circle class="pixel" cx="17" cy="16" r="1" fill="#FFFFFF" opacity="0.6"/>
+    <circle class="pixel" cx="16" cy="20" r="1" fill="#FFFFFF" opacity="0.6"/>
+</svg> 

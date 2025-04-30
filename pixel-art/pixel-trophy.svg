@@ -1,0 +1,13 @@
+<svg width="64" height="64" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .pixel { shape-rendering: crispEdges; }
+    </style>
+    <!-- Trophy Cup -->
+    <path class="pixel" d="M10 8 L22 8 L22 20 Q22 24, 16 24 Q10 24, 10 20 Z" fill="#FFD700"/>
+    <!-- Trophy Handles -->
+    <path class="pixel" d="M8 10 L6 10 Q4 10, 4 12 L4 14 Q4 16, 6 16 L8 16" fill="#FFD700"/>
+    <path class="pixel" d="M24 10 L26 10 Q28 10, 28 12 L28 14 Q28 16, 26 16 L24 16" fill="#FFD700"/>
+    <!-- Trophy Base -->
+    <rect class="pixel" x="14" y="24" width="4" height="4" fill="#FFD700"/>
+    <rect class="pixel" x="12" y="28" width="8" height="2" fill="#FFD700"/>
+</svg> 

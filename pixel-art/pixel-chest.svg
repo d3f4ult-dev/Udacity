@@ -1,0 +1,17 @@
+<svg width="128" height="128" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .pixel { shape-rendering: crispEdges; }
+    </style>
+    <!-- Chest Base -->
+    <rect class="pixel" x="6" y="12" width="20" height="14" fill="#8B4513"/>
+    <!-- Chest Top -->
+    <rect class="pixel" x="4" y="6" width="24" height="6" fill="#A0522D"/>
+    <!-- Lock -->
+    <rect class="pixel" x="14" y="10" width="4" height="4" fill="#FFD700"/>
+    <!-- Highlights -->
+    <rect class="pixel" x="6" y="14" width="20" height="2" fill="#DEB887"/>
+    <rect class="pixel" x="4" y="8" width="24" height="2" fill="#CD853F"/>
+    <!-- Decorative Elements -->
+    <rect class="pixel" x="8" y="16" width="2" height="8" fill="#DEB887"/>
+    <rect class="pixel" x="22" y="16" width="2" height="8" fill="#DEB887"/>
+</svg> 
