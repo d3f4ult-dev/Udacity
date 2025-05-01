@@ -23,7 +23,7 @@ A text-based adventure game set in a mystical forest where your choices determin
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/d3f4ult-dev/Udacity.git
+git clone https://github.com/d3f4ult-dev/Epic-Adventure-Quest.git
 ```
 
 2. Install required packages:
