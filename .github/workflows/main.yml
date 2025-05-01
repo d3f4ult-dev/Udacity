@@ -26,6 +26,7 @@ jobs:
         with:
           name: github-pages
           path: ./dist
+          retention-days: 1
 
   Deploy:
     needs: build
@@ -42,7 +43,18 @@ jobs:
         with:
           name: github-pages
           path: ./dist
+          
+      - name: Verify build files
+        run: |
+          if [ ! -d "./dist" ]; then
+            echo "Error: dist directory not found"
+            exit 1
+          fi
+          echo "Build files verified"
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        timeout-minutes: 5
+        continue-on-error: false
 
