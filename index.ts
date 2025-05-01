@@ -46,7 +46,7 @@ const server = Bun.serve({
         headers: { "Content-Type": "text/html" }
       });
     }
-    
+
     // Fallback: serve index.html
     const file = Bun.file("index.html");
     return new Response(file, {
