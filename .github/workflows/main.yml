@@ -35,12 +35,14 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      path: ./dist
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: github-pages
-      - uses: actions/deploy-pages@v4
+          path: ./dist
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
