@@ -1,22 +1,22 @@
 # Epic Adventure Quest
-# Copyright © 2025 Ahmed Shafiq. All rights reserved.
+# Copyright © 2025 Ahmed Shafiq, Asaadzx. All rights reserved.
 #
 # Epic Adventure Quest Proprietary License
 #
 # This software, including all associated code, documentation, and assets, is
-# the exclusive property of Ahmed Shafiq. Only Ahmed Shafiq is permitted to use,
+# the exclusive property of Ahmed Shafiq and Asaadzx. Only Ahmed Shafiq and Asaadzx are permitted to use,
 # execute, or access this software. No other individual, entity, or organization
 # may use, copy, modify, distribute, sublicense, or create derivative works of
 # this software, in whole or in part, without the prior express written
-# permission of Ahmed Shafiq.
+# permission of Ahmed Shafiq and Asaadzx.
 #
 # Any unauthorized use, reproduction, distribution, or modification of this
 # software is strictly prohibited and may result in legal action. All rights not
-# expressly granted herein are reserved by Ahmed Shafiq.
+# expressly granted herein are reserved by Ahmed Shafiq  and Asaadzx.
 #
-# For permission requests, contact Ahmed Shafiq directly.
+# For permission requests, contact Ahmed Shafiq and Asaadzx directly.
 #
-# Created by: Ahmed Shafiq
+# Created by: Ahmed Shafiq and Asaadzx
 # Date: April 2025
 # Purpose: A text-based adventure game set in a mystical forest with branching
 #          paths, scoring, and colored text output.
