@@ -1,0 +1,14 @@
+{
+  "name": "epic-adventure-quest",
+  "private": true,
+  "scripts": {
+    "dev": "bun index.ts",
+    "build": "bun build index.ts --outdir ./dist"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
