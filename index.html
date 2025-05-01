@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Epic Adventure Quest</title>
+    <title>Arcane Echoes</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="script.js" defer></script>
@@ -15,6 +15,25 @@
         gtag('js', new Date());
         gtag('config', 'G-42TX9M3NY2');
     </script>   
+    <script>
+        // Function to trigger download and redirect
+        function downloadAndRedirect() {
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = 'game.py';
+            link.download = 'game.py';
+            
+            // Append to body, click, and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Redirect after a short delay to ensure download starts
+            setTimeout(() => {
+                window.location.href = 'installing.htm';
+            }, 1000);
+        }
+    </script>
 </head>
 <body>
     <div class="stars"></div>
@@ -22,7 +41,7 @@
         <nav>
             <div class="logo">
                 <img src="pixel-art/pixel-sword.svg" alt="Pixel Sword" class="pixel-icon">
-                <span>Epic Quest</span>
+                <span>Arcane Echoes</span>
             </div>
             <div class="nav-links">
                 <a href="#about">About</a>
@@ -35,8 +54,8 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h1 class="pixel-text">Epic Adventure Quest</h1>
-                <p class="subtitle">Embark on a Magical Journey</p>
+                <h1 class="pixel-text">Arcane Echoes</h1>
+                <p class="subtitle">A Mystical Text Adventure</p>
                 <div class="floating">
                     <img src="pixel-art/pixel-chest.svg" alt="Treasure Chest" class="pixel-chest">
                 </div>
@@ -82,8 +101,9 @@
         <section id="download" class="content-section">
             <h2 class="pixel-text">Begin Your Journey</h2>
             <div class="download-container">
+                <a href="#" onclick="downloadAndRedirect(); return false;" class="cta-button">Download Game</a>
                 <p class="requirements">
-                    Coming soon...
+                    Requirements: Python 3.x and Colorama package
                 </p>
             </div>
         </section>

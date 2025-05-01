@@ -1,22 +1,22 @@
-# Epic Adventure Quest
-# Copyright © 2025 Ahmed Shafiq, Asaadzx. All rights reserved.
+# Arcane Echoes
+# Copyright © 2025 Ahmed Shafiq. All rights reserved.
 #
-# Epic Adventure Quest Proprietary License
+# Arcane Echoes Proprietary License
 #
 # This software, including all associated code, documentation, and assets, is
-# the exclusive property of Ahmed Shafiq and Asaadzx. Only Ahmed Shafiq and Asaadzx are permitted to use,
+# the exclusive property of Ahmed Shafiq. Only Ahmed Shafiq is permitted to use,
 # execute, or access this software. No other individual, entity, or organization
 # may use, copy, modify, distribute, sublicense, or create derivative works of
 # this software, in whole or in part, without the prior express written
-# permission of Ahmed Shafiq and Asaadzx.
+# permission of Ahmed Shafiq.
 #
 # Any unauthorized use, reproduction, distribution, or modification of this
 # software is strictly prohibited and may result in legal action. All rights not
-# expressly granted herein are reserved by Ahmed Shafiq  and Asaadzx.
+# expressly granted herein are reserved by Ahmed Shafiq.
 #
-# For permission requests, contact Ahmed Shafiq and Asaadzx directly.
+# For permission requests, contact Ahmed Shafiq directly.
 #
-# Created by: Ahmed Shafiq and Asaadzx
+# Created by: Ahmed Shafiq
 # Date: April 2025
 # Purpose: A text-based adventure game set in a mystical forest with branching
 #          paths, scoring, and colored text output.
@@ -145,7 +145,7 @@ def display_welcome():
     Returns:
         None
     """
-    print_sleep("🌟 Welcome to the Epic Adventure Quest! 🌟", Fore.YELLOW)
+    print_sleep("🌟 Welcome to Arcane Echoes! 🌟", Fore.YELLOW)
     print_sleep(
         "You wake up in a mystical forest 🌲🌳, the air shimmering with "
         "magic ✨.",
