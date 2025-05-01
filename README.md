@@ -33,7 +33,7 @@ pip install colorama
 
 3. Run the game:
 ```bash
-python game.py
+python3 game.py
 ```
 
 ## 🎮 How to Play
