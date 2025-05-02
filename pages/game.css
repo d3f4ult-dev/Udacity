@@ -1,0 +1,168 @@
+:root{
+    --primary-color: #4a90e2;
+    --secondary-color: #f39c12;
+    --background-color: #1a1a2e;
+    --text-color: #ffffff;
+    --accent-color: #e74c3c;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: var(--background-color);
+    color: var(var(--text-color));
+    line-height: 1.6;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+/* Stars Background Animation */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: transparent;
+    animation: stars 20s linear infinite;
+    z-index: -1;
+}
+
+.stars::after {
+    content: '';
+    position: absolute;
+    top: -10rem;
+    left: -10rem;
+    width: calc(100% + 120rem);
+    height: calc(100% + 120rem);
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    animation: stars 20s linear infinite;
+    transform: rotate(45deg);
+}
+
+@keyframes stars {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+.game-container {
+    display: flex;
+    width: 90%;
+    max-width: 1200px;
+    background-color: #2a2a2a;
+    border: 1px solid #555;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#state-area {
+    width: 25%;
+    padding: 20px;
+    background-color: #3a3a3a;
+    border-right: 1px solid #555;
+    box-sizing: border-box;
+    overflow-y: auto; /* Allow scrolling if stats/inventory grow */
+}
+
+#state-area h2, #state-area h3 {
+    color: #ffff00; /* Yellow */
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+    margin-top: 10px;
+}
+
+#state-area p, #state-area li {
+    margin-bottom: 5px;
+}
+
+#inventory-list, #achievements-list, #stats-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+#inventory-list li, #achievements-list li, #stats-list li {
+    margin-bottom: 3px;
+    font-size: 0.9em;
+}
+
+
+.main-game-area {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+#output {
+    flex-grow: 1; /* Takes up remaining space */
+    padding: 20px;
+    overflow-y: auto; /* Make output area scrollable */
+    max-height: 60vh; /* Limit height to keep input visible */
+    box-sizing: border-box;
+    border-bottom: 1px solid #555; /* Separator */
+}
+
+#output p {
+    margin: 5px 0;
+    line-height: 1.4;
+}
+
+#input-area {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between buttons */
+}
+
+#input-area button {
+    background-color: #4a4a4a;
+    color: #e0e0e0;
+    border: 1px solid #666;
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+#input-area button:hover {
+    background-color: #5a5a5a;
+}
+
+/* Colorama equivalents using CSS classes */
+.yellow-text { color: #ffff00; }
+.green-text { color: #00ff00; }
+.red-text { color: #ff0000; }
+.cyan-text { color: #00ffff; }
+.magenta-text { color: #ff00ff; }
+.reset-text { color: #e0e0e0; } /* Default text color */
+
+/* Style for game over messages */
+.win-text { color: #00ff00; font-weight: bold; }
+.lose-text { color: #ff0000; font-weight: bold; }
+
+/* Emoji scaling (optional) */
+#output p span {
+    font-size: 1.2em; /* Slightly larger emojis */
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcane Echoes</title>
+    <link rel="stylesheet" href="game.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="game-container">
+        <div id="state-area">
+            <h2>Game State</h2>
+            <p>Score: <span id="score">0</span></p>
+            <p>Turns: <span id="turns">0</span>/<span id="max-turns">10</span></p>
+            <div id="inventory-display">
+                <h3>Inventory:</h3>
+                <ul id="inventory-list">
+                    <li>Empty</li>
+                </ul>
+            </div>
+             <div id="achievements-display">
+                <h3>Achievements:</h3>
+                <ul id="achievements-list">
+                    <li>None yet</li>
+                </ul>
+            </div>
+             <div id="stats-display">
+                <h3>Stats:</h3>
+                <ul id="stats-list">
+                    <li>Health: 100</li>
+                    <li>Strength: 10</li>
+                    <li>Magic: 5</li>
+                    <li>Luck: 5</li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-game-area">
+            <div id="output">
+                </div>
+            <div id="input-area">
+                </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

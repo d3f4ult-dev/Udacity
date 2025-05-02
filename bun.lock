@@ -4,7 +4,7 @@
     "": {
       "name": "epic-adventure-quest",
       "devDependencies": {
-        "@types/bun": "latest",
+        "@types/bun": "^1.2.11",
       },
       "peerDependencies": {
         "typescript": "^5",

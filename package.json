@@ -6,7 +6,7 @@
     "build": "bun build index.ts --outdir ./dist"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "^1.2.11"
   },
   "peerDependencies": {
     "typescript": "^5"
